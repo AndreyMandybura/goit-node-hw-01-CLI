@@ -1,14 +1,22 @@
-// index.js
+const { program } = require("commander");
 const contactsOperations = require("./contacts");
 
-// const argv = require('yargs').argv;
+program
+  .option('-a, --action <type>', 'choose action')
+  .option('-i, --id <type>', 'user id')
+  .option('-n, --name <type>', 'user name')
+  .option('-e, --email <type>', 'user email')
+  .option('-p, --phone <type>', 'user phone');
 
-// TODO: рефакторить
+program.parse(process.argv);
+  
+const argv = program.opts();
+
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case 'list':
           const contacts = await contactsOperations.listContacts();
-          console.log(contacts);
+          console.table(contacts);
       break;
 
     case 'get':
@@ -31,7 +39,4 @@ async function invokeAction({ action, id, name, email, phone }) {
   }
 }
 
-// invokeAction({action: "list"});
-// invokeAction({ action: "get", id: "1" });
-// invokeAction({ action: "add", name: "Huawei", email: "huawei@Mmail.com", phone: "777-77-77" });
-invokeAction({ action: "remove", id: "94137796-c4db-4de9-91b7-292c6ed1a909" });
+invokeAction(argv);
